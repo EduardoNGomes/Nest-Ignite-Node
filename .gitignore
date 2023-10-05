@@ -37,3 +37,6 @@ lerna-debug.log*
 # ENV
 /.env
 /data
+
+/private_key.pem
+/public_key.pem
