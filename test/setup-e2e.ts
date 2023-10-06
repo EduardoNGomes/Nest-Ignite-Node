@@ -5,7 +5,7 @@ import { execSync } from 'node:child_process'
 
 const prisma = new PrismaClient()
 
-function generateUniqueDataBaseURL(schemaId) {
+function generateUniqueDataBaseURL(schemaId: string) {
   if (!process.env.DATABASE_URL) {
     throw new Error('DATABASE_URL is required')
   }
