@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
-import { ConfigService } from '@nestjs/config'
-import { Env } from './env'
+import { EnvService } from './env/env.service'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -9,8 +8,8 @@ async function bootstrap() {
   })
 
   // Tipando as variaveis de ambiente e afirmando que elas foram validadas
-  const configService = app.get<ConfigService<Env, true>>(ConfigService)
-  const port = configService.get('PORT', { infer: true })
+  const envService = app.get(EnvService)
+  const port = envService.get('PORT')
 
   await app.listen(port)
 }
