@@ -1,16 +1,31 @@
 import { QuestionAttachmentsRepository } from '@/domain/forum/application/repositories/question-attachment-repository'
-import { QuestionAttachment } from '@/domain/forum/enterprise/entities/question-attachment'
 import { Injectable } from '@nestjs/common'
+import { PrismaService } from '../prisma.service'
+import { PrismaQuestionAttachmentMapper } from '../../mappers/prisma-question-attachment-mapper'
 
 @Injectable()
 export class PrismaQuestionAttachmentsRepository
   implements QuestionAttachmentsRepository
 {
-  findManyByAnswerId(questionId: string): Promise<QuestionAttachment[]> {
-    throw new Error('Method not implemented.')
+  constructor(private prisma: PrismaService) {}
+
+  async findManyByAnswerId(questionId: string) {
+    const questionAttachments = await this.prisma.attachment.findMany({
+      where: {
+        questionId,
+      },
+    })
+
+    return questionAttachments.map((questionAttachment) =>
+      PrismaQuestionAttachmentMapper.toDomain(questionAttachment),
+    )
   }
 
-  deleteManyByQuestionId(questionId: string): Promise<void> {
-    throw new Error('Method not implemented.')
+  async deleteManyByQuestionId(questionId: string) {
+    await this.prisma.attachment.deleteMany({
+      where: {
+        questionId,
+      },
+    })
   }
 }
