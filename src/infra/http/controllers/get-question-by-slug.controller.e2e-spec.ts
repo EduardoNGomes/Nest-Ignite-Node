@@ -22,9 +22,11 @@ describe('Get question by slug', () => {
     }).compile()
 
     app = moduleRef.createNestApplication()
+    jwt = moduleRef.get(JwtService)
+
     studentFactory = moduleRef.get(StudentFactory)
     questionFactory = moduleRef.get(QuestionFactory)
-    jwt = moduleRef.get(JwtService)
+
     await app.init()
   })
   test('[GET] /questions/:slug', async () => {
