@@ -9,7 +9,7 @@ import { AnswerFactory } from 'test/factories/make-answer'
 import { QuestionFactory } from 'test/factories/make-question'
 import { StudentFactory } from 'test/factories/make-student'
 
-describe('Edit answer(E2E)', () => {
+describe('Delete answer(E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
 
@@ -35,7 +35,7 @@ describe('Edit answer(E2E)', () => {
 
     await app.init()
   })
-  test('[PUT] /answers/:id', async () => {
+  test('[DELETE] /answers/:id', async () => {
     const user = await studentFactory.makePrismaStudent()
 
     const accessToken = jwt.sign({ sub: user.id.toString() })
@@ -52,18 +52,16 @@ describe('Edit answer(E2E)', () => {
     const answerId = answer.id.toString()
 
     const response = await request(app.getHttpServer())
-      .put(`/answers/${answerId}`)
+      .delete(`/answers/${answerId}`)
       .set('Authorization', `Bearer ${accessToken}`)
-      .send({
-        content: 'New content answer',
-      })
+      .send()
 
     expect(response.statusCode).toEqual(204)
 
     const answerOnDatabase = await prisma.answer.findFirst({
-      where: { content: 'New content answer' },
+      where: { content: answer.content },
     })
 
-    expect(answerOnDatabase).toBeTruthy()
+    expect(answerOnDatabase).toBeNull()
   })
 })
