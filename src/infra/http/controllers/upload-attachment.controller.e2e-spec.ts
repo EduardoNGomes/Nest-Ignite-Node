@@ -35,6 +35,8 @@ describe('Upload attachment', () => {
       .set('Authorization', `Bearer ${accessToken}`)
       .attach('file', './test/e2e/curriculum.pdf')
 
-    expect(response.statusCode).toEqual(201)
+    expect(response.body).toEqual({
+      attachmentId: expect.any(String),
+    })
   })
 })
